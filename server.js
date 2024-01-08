@@ -81,7 +81,7 @@ app.post("/login", async (req, res) => {
   try {
     const data = await user.findOne({ email: req.body.email });
     if (data) {
-      if (data.password === req.body.password) {
+      if ( req.body.password === data.password ) {
         req.session.userId = data._id; // Store user ID in session
         req.flash("success", "Welcome! You have successfully signed in");
         res.redirect("/home");  
