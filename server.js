@@ -80,7 +80,7 @@ app.post("/login", async (req, res) => {
     if (data) {
       
         
-      );
+    
       if ( password === req.body.password) {
         req.session.userId = data._id; // Store user ID in session
         req.flash("success", "Welcome! You have successfully signed in");
