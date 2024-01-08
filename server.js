@@ -2,6 +2,7 @@ const express = require("express");
 const ejs = require("ejs");
 const session = require("express-session");
 const flash = require("express-flash");
+const bcrypt = require("bcrypt");
 
 const multer = require("multer");
 const mongoose = require("mongoose");
@@ -49,12 +50,12 @@ app.get("/register", (req, res) => {
 
 app.post("/register", async (req, res) => {
   try {
-    
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
     const data = {
       username: req.body.username,
       email: req.body.email,
-      password: req.body.password,
+      password: hashedPassword,
     };
 
     const checkEmail = await user.findOne({ email: req.body.email });
@@ -80,10 +81,12 @@ app.post("/login", async (req, res) => {
   try {
     const data = await user.findOne({ email: req.body.email });
     if (data) {
+      const passwordMatch = await bcrypt.compare(
+        req.body.password,
+        data.password
+      );
       
-        
-    
-      if ( password === req.body.password) {
+      if (passwordMatch) {
         req.session.userId = data._id; // Store user ID in session
         req.flash("success", "Welcome! You have successfully signed in");
         res.redirect("/home"); // Redirect to /home instead of rendering home.ejs directly
