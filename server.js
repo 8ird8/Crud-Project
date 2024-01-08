@@ -2,7 +2,7 @@ const express = require("express");
 const ejs = require("ejs");
 const session = require("express-session");
 const flash = require("express-flash");
-const bcrypt = require("bcryptjs");
+
 
 const multer = require("multer");
 const mongoose = require("mongoose");
