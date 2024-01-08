@@ -50,12 +50,12 @@ app.get("/register", (req, res) => {
 
 app.post("/register", async (req, res) => {
   try {
-    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    
 
     const data = {
       username: req.body.username,
       email: req.body.email,
-      password: hashedPassword,
+      password: req.body.password,
     };
 
     const checkEmail = await user.findOne({ email: req.body.email });
@@ -81,15 +81,10 @@ app.post("/login", async (req, res) => {
   try {
     const data = await user.findOne({ email: req.body.email });
     if (data) {
-      const passwordMatch = await bcrypt.compare(
-        req.body.password,
-        data.password
-      );
-      
-      if (passwordMatch) {
+      if (data.password === req.body.password) {
         req.session.userId = data._id; // Store user ID in session
         req.flash("success", "Welcome! You have successfully signed in");
-        res.redirect("/home"); // Redirect to /home instead of rendering home.ejs directly
+        res.redirect("/home");  
       } else {
         req.flash("error", "Invalid password");
         res.redirect("/login");
@@ -104,7 +99,7 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.get("/", async (req, res) => {
+app.get("/home", async (req, res) => {
   try {
     if (req.session.userId) {
       const User = await user.findById(req.session.userId);
