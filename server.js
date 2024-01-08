@@ -101,7 +101,7 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.get("/home", async (req, res) => {
+app.get("/", async (req, res) => {
   try {
     if (req.session.userId) {
       const User = await user.findById(req.session.userId);
