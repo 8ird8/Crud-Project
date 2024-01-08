@@ -2,7 +2,6 @@ const express = require("express");
 const ejs = require("ejs");
 const session = require("express-session");
 const flash = require("express-flash");
-const MongoDBStore = require('connect-mongodb-session')(session);
 
 const multer = require("multer");
 const mongoose = require("mongoose");
@@ -10,16 +9,7 @@ const { format } = require("date-fns");
 const methodOverride = require("method-override");
 
 const app = express();
-const mongoURI = 'your_mongodb_uri';
-const store = new MongoDBStore({
-  uri: mongoURI,
-  collection: 'sessions',
-});
 
-// Catch errors
-store.on('error', function (error) {
-  console.error(error);
-});
 
 const user = require("./models/user");
 const student = require("./models/student");
@@ -34,7 +24,7 @@ app.use(
     secret: "achraf123",
     resave: false,
     saveUninitialized: true,
-    store: store,
+    
   })
 );
 app.use(flash());
